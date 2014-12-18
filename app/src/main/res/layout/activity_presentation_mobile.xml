@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/presentation_mobile_start"
+        android:id="@+id/presentation_mobile_start"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/presentation_mobile_list_device"
+        android:layout_below="@id/presentation_mobile_start"/>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/presentation_mobile_list_device">
+        <TextView
+            android:id="@+id/presentation_mobile_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </ScrollView>
+
+
+
+</RelativeLayout>
