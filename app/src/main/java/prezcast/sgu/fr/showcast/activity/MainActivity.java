@@ -1,4 +1,4 @@
-package prezcast.sgu.fr.showcast;
+package prezcast.sgu.fr.showcast.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import prezcast.sgu.fr.showcast.R;
 import prezcast.sgu.fr.showcast.roboguice.RoboActionBarActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -28,8 +29,6 @@ public class MainActivity extends RoboActionBarActivity {
      * Application directory.
      */
     public static final String APP_SDCARD_DIRECTORY = "/sdcard/showcast";
-
-    private static final String TAG = "ShowCast-Main";
 
     /**
      * List presentation directory.
@@ -48,7 +47,6 @@ public class MainActivity extends RoboActionBarActivity {
 
         // Create application folder
         initFirstTime();
-
     }
 
     @Override
@@ -88,23 +86,12 @@ public class MainActivity extends RoboActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 }

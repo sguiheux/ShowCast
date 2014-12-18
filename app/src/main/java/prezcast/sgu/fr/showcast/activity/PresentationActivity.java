@@ -1,4 +1,4 @@
-package prezcast.sgu.fr.showcast;
+package prezcast.sgu.fr.showcast.activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import prezcast.sgu.fr.showcast.presentation.PresentationContents;
+import prezcast.sgu.fr.showcast.R;
+import prezcast.sgu.fr.showcast.presentation.TvPresentation;
 import prezcast.sgu.fr.showcast.roboguice.RoboActionBarActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -37,15 +40,13 @@ import roboguice.inject.InjectView;
 public class PresentationActivity extends RoboActionBarActivity implements View.OnClickListener {
 
     /////    CONSTANTS
-
-    /**
-     * Key to get intent parameter.
-     */
+    // Intent parameter key
     public static final String INTENT_ARG_DIRECTORY = "directory";
-
+    // Index to get saved currentIndex
     public static final String CURRENT_INDEX = "index";
-
+    // Index to get saved device in presentation
     public static final String ACTIVE_DEVICE = "activeDevice";
+
     /**
      * Tag for log.
      */
@@ -54,69 +55,60 @@ public class PresentationActivity extends RoboActionBarActivity implements View.
 
     //////   VIEW Objects
 
-    /**
-     * Start button.
-     */
+    // Start presentation button
     @InjectView(R.id.presentation_mobile_start)
     private Button buttonStart;
 
-    /**
-     * Presentation listing.
-     */
+    // Display list
     @InjectView(R.id.presentation_mobile_list_device)
     private ListView listView;
 
+    // Note during presentation
     @InjectView(R.id.presentation_mobile_note)
     private TextView notePresentation;
 
+    // Layout used during the presentation
     @InjectView(R.id.presentation_mobile_on )
     private RelativeLayout layoutOnPrez;
 
+    // Layout used during device selection
     @InjectView(R.id.presentation_mobile_off )
     private RelativeLayout layoutOffPrez;
 
+    // Bouton to show next image
     @InjectView(R.id.presentation_mobile_next)
     private Button nextButton;
 
+    // Bouton to show prvious image
     @InjectView(R.id.presentation_mobile_previous)
     private Button previousButton;
+
+    // Note of the presentation
+    @InjectView(R.id.presentation_mobile_note)
+    private TextView note;
 
 
     ///////  Other
 
-    /**
-     * Display manager.
-     */
+    // Display manager
     private DisplayManager mDisplayManager;
 
     // List of all currently visible presentations indexed by display id.
     private final SparseArray<TvPresentation> mActivePresentations = new SparseArray<>();
 
-    /**
-     * Current page of the presentation.
-     */
+    // Current index of the presentation
     private int currentIndex = 0;
 
-    /**
-     * List of active device
-     */
+    // List of saved active device
     private List<String> listActiveDevice;
 
-    /**
-     * Display selected.
-     */
+    // Device selected
     private Display selectedDisplay;
 
-    /**
-     * Presentation directory.
-     */
+    // folder of the current presentation
     private String directory;
 
-    /**
-     * Presentation notes.
-     */
-    @InjectView(R.id.presentation_mobile_note)
-    private TextView note;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -290,11 +282,9 @@ public class PresentationActivity extends RoboActionBarActivity implements View.
     public void onClick(View v) {
             switch(v.getId()){
                 case R.id.presentation_mobile_next:
-                    Log.d("Index","TryIndex +1:"+currentIndex);
                     updatePresentation(currentIndex + 1);
                     break;
                 case R.id.presentation_mobile_previous:
-                    Log.d("Index","TryIndex -1:"+currentIndex);
                     updatePresentation(currentIndex-1);
                     break;
                 case R.id.presentation_mobile_start:

@@ -1,4 +1,4 @@
-package prezcast.sgu.fr.showcast;
+package prezcast.sgu.fr.showcast.presentation;
 
 import android.os.Parcel;
 import android.os.Parcelable;

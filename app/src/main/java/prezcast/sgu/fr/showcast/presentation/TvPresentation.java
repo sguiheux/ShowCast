@@ -1,7 +1,6 @@
-package prezcast.sgu.fr.showcast;
+package prezcast.sgu.fr.showcast.presentation;
 
 import android.app.Presentation;
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,8 +11,12 @@ import android.widget.ImageView;
 import android.widget.ViewSwitcher;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.Arrays;
+
+import prezcast.sgu.fr.showcast.R;
+import prezcast.sgu.fr.showcast.activity.MainActivity;
+import prezcast.sgu.fr.showcast.activity.PresentationActivity;
+import prezcast.sgu.fr.showcast.presentation.PresentationContents;
 
 /**
  * Second screen.
@@ -23,7 +26,13 @@ public class TvPresentation extends Presentation implements ViewSwitcher.ViewFac
     /** Content to show.*/
     public PresentationContents contents;
 
+    /** Container of the ImageView. */
     private ImageSwitcher imageSwitcher;
+
+    /**
+     * Tag for log.
+     */
+    private static final String TAG = "ShowCast-TvPresentation";
 
 
 
@@ -50,6 +59,11 @@ public class TvPresentation extends Presentation implements ViewSwitcher.ViewFac
         showContent(contents.index);
     }
 
+    /**
+     * Load Image if index is good.
+     * @param index Index of the image
+     * @return
+     */
     private boolean updateContent(int index) {
         File f = new File(MainActivity.APP_SDCARD_DIRECTORY+"/"+contents.prez+"/img/");
         File[] fileTab = f.listFiles();
@@ -74,11 +88,15 @@ public class TvPresentation extends Presentation implements ViewSwitcher.ViewFac
         return iView;
     }
 
+    /**
+     * Show Image
+     * @param currentIndex Index of the image
+     * @return
+     */
     public boolean showContent(int currentIndex) {
-        Log.d("ChangeIndex","New Index:"+currentIndex);
         if(updateContent(currentIndex)){
             contents.index = currentIndex;
-            Log.d("ChangeIndex","OK Index:"+currentIndex);
+            Log.d(TAG,"Change Index:"+currentIndex);
             return true;
         }
         return false;
