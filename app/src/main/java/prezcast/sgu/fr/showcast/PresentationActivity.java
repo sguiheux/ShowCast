@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.File;
@@ -33,7 +34,7 @@ import roboguice.inject.InjectView;
  * Show notes
  */
 @ContentView(R.layout.activity_presentation_mobile)
-public class PresentationActivity extends RoboActionBarActivity {
+public class PresentationActivity extends RoboActionBarActivity implements View.OnClickListener {
 
     /////    CONSTANTS
 
@@ -42,7 +43,9 @@ public class PresentationActivity extends RoboActionBarActivity {
      */
     public static final String INTENT_ARG_DIRECTORY = "directory";
 
-    public static final String PRESENTATION_SAVE_KEY = "savedPresentation";
+    public static final String CURRENT_INDEX = "index";
+
+    public static final String ACTIVE_DEVICE = "activeDevice";
     /**
      * Tag for log.
      */
@@ -66,6 +69,18 @@ public class PresentationActivity extends RoboActionBarActivity {
     @InjectView(R.id.presentation_mobile_note)
     private TextView notePresentation;
 
+    @InjectView(R.id.presentation_mobile_on )
+    private RelativeLayout layoutOnPrez;
+
+    @InjectView(R.id.presentation_mobile_off )
+    private RelativeLayout layoutOffPrez;
+
+    @InjectView(R.id.presentation_mobile_next)
+    private Button nextButton;
+
+    @InjectView(R.id.presentation_mobile_previous)
+    private Button previousButton;
+
 
     ///////  Other
 
@@ -74,13 +89,18 @@ public class PresentationActivity extends RoboActionBarActivity {
      */
     private DisplayManager mDisplayManager;
 
-    /**
-     * List of presentation contents indexed by displayId.
-     */
-    private SparseArray<PresentationContents> mSavedPresentationContents;
-
     // List of all currently visible presentations indexed by display id.
     private final SparseArray<TvPresentation> mActivePresentations = new SparseArray<>();
+
+    /**
+     * Current page of the presentation.
+     */
+    private int currentIndex = 0;
+
+    /**
+     * List of active device
+     */
+    private List<String> listActiveDevice;
 
     /**
      * Display selected.
@@ -104,13 +124,13 @@ public class PresentationActivity extends RoboActionBarActivity {
 
         // Restore active presentation content
         if (savedInstanceState != null) {
-            mSavedPresentationContents =
-                    savedInstanceState.getSparseParcelableArray(PRESENTATION_SAVE_KEY);
-            directory =
-                    savedInstanceState.getString(INTENT_ARG_DIRECTORY);
+            currentIndex = savedInstanceState.getInt(CURRENT_INDEX);
+            directory = savedInstanceState.getString(INTENT_ARG_DIRECTORY);
+            listActiveDevice = savedInstanceState.getStringArrayList(ACTIVE_DEVICE);
         } else {
-            mSavedPresentationContents = new SparseArray<>();
             directory = getIntent().getStringExtra(INTENT_ARG_DIRECTORY);
+            currentIndex = 0;
+            listActiveDevice = new ArrayList<>();
         }
     }
 
@@ -118,20 +138,22 @@ public class PresentationActivity extends RoboActionBarActivity {
     protected void onResume() {
         super.onResume();
 
+        mActivePresentations.clear();
         mDisplayManager = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
 
         boolean hasActivePresentation = false;
         // Restore presentations from before the activity was paused.
-        for (Display d : mDisplayManager.getDisplays()) {
-            if (mActivePresentations.get(d.getDisplayId()) != null) {
-                final PresentationContents contents = mSavedPresentationContents.get(d.getDisplayId());
-                if (contents != null) {
-                    showPresentation(d, contents);
-                    hasActivePresentation = true;
+        if(!listActiveDevice.isEmpty()) {
+            for (Display d : mDisplayManager.getDisplays()) {
+                if (listActiveDevice.contains(String.valueOf(d.getDisplayId()))) {
+                    final PresentationContents contents = new PresentationContents(directory, currentIndex);
+                    if (contents != null) {
+                        showPresentation(d, contents);
+                        hasActivePresentation = true;
+                    }
                 }
             }
         }
-        mSavedPresentationContents.clear();
 
         if (hasActivePresentation) {
             updatePresentationNote();
@@ -150,7 +172,7 @@ public class PresentationActivity extends RoboActionBarActivity {
         for (int i = 0; i < mActivePresentations.size(); i++) {
             TvPresentation presentation = mActivePresentations.valueAt(i);
             int displayId = mActivePresentations.keyAt(i);
-            mSavedPresentationContents.put(displayId, presentation.contents);
+            listActiveDevice.add(String.valueOf(displayId));
             presentation.dismiss();
         }
         mActivePresentations.clear();
@@ -161,21 +183,16 @@ public class PresentationActivity extends RoboActionBarActivity {
         super.onSaveInstanceState(outState);
 
         // Save active active presentation content
-        outState.putSparseParcelableArray(PRESENTATION_SAVE_KEY, mSavedPresentationContents);
+        outState.putInt(CURRENT_INDEX, currentIndex);
         outState.putString(INTENT_ARG_DIRECTORY, directory);
+        outState.putStringArrayList(ACTIVE_DEVICE, (ArrayList<String>) listActiveDevice);
     }
 
     private void initView() {
+        layoutOnPrez.setVisibility(View.GONE);
+        layoutOffPrez.setVisibility(View.VISIBLE);
         buttonStart.setEnabled(false);
-        buttonStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PresentationContents contents = new PresentationContents(directory, 0);
-                mSavedPresentationContents.put(selectedDisplay.getDisplayId(), contents);
-                showPresentation(selectedDisplay, contents);
-                updatePresentationNote();
-            }
-        });
+        buttonStart.setOnClickListener(this);
 
         final List<String> deviceName = new ArrayList<>();
         for (Display d : mDisplayManager.getDisplays()) {
@@ -196,10 +213,13 @@ public class PresentationActivity extends RoboActionBarActivity {
     }
 
     private void updatePresentationNote() {
+        layoutOnPrez.setVisibility(View.VISIBLE);
+        layoutOffPrez.setVisibility(View.GONE);
+
         File f = new File(MainActivity.APP_SDCARD_DIRECTORY + "/" + directory + "/note/");
         File[] fileTab = f.listFiles();
         Arrays.sort(fileTab);
-        File text = fileTab[mSavedPresentationContents.get(selectedDisplay.getDisplayId()).index];
+        File text = fileTab[currentIndex];
 
         //création de l'objet de lecture
         FileReader fr = null;
@@ -218,6 +238,12 @@ public class PresentationActivity extends RoboActionBarActivity {
             e.printStackTrace();
         }
         notePresentation.setText(str);
+
+
+        nextButton.setOnClickListener(this);
+        previousButton.setOnClickListener(this);
+
+
 
     }
 
@@ -241,26 +267,50 @@ public class PresentationActivity extends RoboActionBarActivity {
         mActivePresentations.put(displayId, presentation);
     }
 
-    private final DialogInterface.OnDismissListener mOnDismissListener =
-            new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    TvPresentation presentation = (TvPresentation) dialog;
+    private final DialogInterface.OnDismissListener mOnDismissListener;
+
+    {
+        mOnDismissListener = new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                TvPresentation presentation = (TvPresentation) dialog;
+                if(presentation != null){
                     int displayId = presentation.getDisplay().getDisplayId();
                     Log.d(TAG, "Presentation on display #" + displayId + " was dismissed.");
                     mActivePresentations.delete(displayId);
                 }
+
+            }
+
+
+        };
+    }
+
+    @Override
+    public void onClick(View v) {
+            switch(v.getId()){
+                case R.id.presentation_mobile_next:
+                    Log.d("Index","TryIndex +1:"+currentIndex);
+                    updatePresentation(currentIndex + 1);
+                    break;
+                case R.id.presentation_mobile_previous:
+                    Log.d("Index","TryIndex -1:"+currentIndex);
+                    updatePresentation(currentIndex-1);
+                    break;
+                case R.id.presentation_mobile_start:
+                    PresentationContents contents = new PresentationContents(directory, 0);
+                    showPresentation(selectedDisplay, contents);
+                    updatePresentationNote();
+                    break;
+            }
+    }
+
+    private void updatePresentation(int futurIndex) {
+        for(int i=0;i<mActivePresentations.size();i++){
+            TvPresentation tv = mActivePresentations.valueAt(i);
+            if(tv.showContent(futurIndex)){
+                currentIndex = futurIndex;
             };
-
-    /*
-    class DisplayAdaterListenerImpl implements DisplayAdapter.DisplayAdapterListener{
-
-        @Override
-        public void onDisplaySelected(Display d) {
-            selectedDisplay = d;
-            Log.d(TAG,"Display selected:"+selectedDisplay.getName());
-            buttonStart.setEnabled(true);
         }
     }
-    */
 }

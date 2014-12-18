@@ -1,8 +1,17 @@
 <resources>
 
     <!-- Base application theme. -->
+    <!-- extend one of the Theme.AppCompat themes -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="horizontalCenter">
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="mainList">
+        <item name="android:layout_marginTop">20dp</item>
     </style>
 
 </resources>

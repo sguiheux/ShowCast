@@ -3,28 +3,102 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/presentation_mobile_start"
-        android:id="@+id/presentation_mobile_start"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
-    <ListView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/presentation_mobile_list_device"
-        android:layout_below="@id/presentation_mobile_start"/>
-    <ScrollView
+    <!-- LAYOUT WHEN PRESENTATION IS ON -->
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/presentation_mobile_list_device">
-        <TextView
-            android:id="@+id/presentation_mobile_note"
-            android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        android:id="@+id/presentation_mobile_on">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            />
-    </ScrollView>
+            android:layout_centerHorizontal="true"
+            android:id="@+id/presentation_mobile_time_layout"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:id="@+id/presentation_mobile_all_time"
+                android:text="000"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:id="@+id/presentation_mobile_slide_time"
+                android:text="000"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/presentation_mobile_change_layout"
+            android:layout_below="@id/presentation_mobile_time_layout"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/presentation_mobile_previous"
+                android:text="@string/presentation_mobile_previous"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/presentation_mobile_next"
+            android:text="@string/presentation_mobile_next"/>
+
+        </LinearLayout>
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/presentation_mobile_change_layout"
+            android:id="@+id/presentation_mobile_note_layout">
+            <TextView
+                android:id="@+id/presentation_mobile_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+        </ScrollView>
+
+    </RelativeLayout>
+
+    <!-- LAYOUT WHEN PRESENTATION IS OFF -->
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:visibility="visible"
+        android:id="@+id/presentation_mobile_off">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/presentation_mobile_start"
+            android:id="@+id/presentation_mobile_start"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/presentation_mobile_list_title"
+            android:layout_below="@id/presentation_mobile_start"
+            android:text="@string/presentation_mobile_list_device_title"
+            android:textAppearance="@android:style/TextAppearance.Material.Large"
+            style="@style/horizontalCenter"/>
+
+        <ListView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/presentation_mobile_list_title"
+            android:id="@+id/presentation_mobile_list_device"/>
+
+    </RelativeLayout>
+
+
+
 
 
 

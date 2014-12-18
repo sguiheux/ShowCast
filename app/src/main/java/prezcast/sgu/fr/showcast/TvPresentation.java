@@ -4,6 +4,7 @@ import android.app.Presentation;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.ImageSwitcher;
@@ -21,6 +22,8 @@ public class TvPresentation extends Presentation implements ViewSwitcher.ViewFac
 
     /** Content to show.*/
     public PresentationContents contents;
+
+    private ImageSwitcher imageSwitcher;
 
 
 
@@ -40,16 +43,25 @@ public class TvPresentation extends Presentation implements ViewSwitcher.ViewFac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.presentation_tv);
 
-        ImageSwitcher imageSwitcher = (ImageSwitcher) findViewById(R.id.presentation_tv_switch);
+        imageSwitcher = (ImageSwitcher) findViewById(R.id.presentation_tv_switch);
         imageSwitcher.setFactory(this);
 
 
+        showContent(contents.index);
+    }
+
+    private boolean updateContent(int index) {
         File f = new File(MainActivity.APP_SDCARD_DIRECTORY+"/"+contents.prez+"/img/");
         File[] fileTab = f.listFiles();
         Arrays.sort(fileTab);
-        File image = fileTab[contents.index];
-        Uri imageUri = Uri.fromFile(image);
-        imageSwitcher.setImageURI(imageUri);
+
+        if(index>=0 && index<fileTab.length){
+            File image = fileTab[index];
+            Uri imageUri = Uri.fromFile(image);
+            imageSwitcher.setImageURI(imageUri);
+            return true;
+        }
+        return false;
     }
 
 
@@ -60,5 +72,15 @@ public class TvPresentation extends Presentation implements ViewSwitcher.ViewFac
                 (ImageSwitcher.LayoutParams.MATCH_PARENT,ImageSwitcher.LayoutParams.MATCH_PARENT));
         iView.setBackgroundColor(0xFF000000);
         return iView;
+    }
+
+    public boolean showContent(int currentIndex) {
+        Log.d("ChangeIndex","New Index:"+currentIndex);
+        if(updateContent(currentIndex)){
+            contents.index = currentIndex;
+            Log.d("ChangeIndex","OK Index:"+currentIndex);
+            return true;
+        }
+        return false;
     }
 }
