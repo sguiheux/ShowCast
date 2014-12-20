@@ -17,19 +17,15 @@
             android:layout_centerHorizontal="true"
             android:id="@+id/presentation_mobile_time_layout"
             android:orientation="horizontal">
-            <TextView
+            <Chronometer
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:id="@+id/presentation_mobile_all_time"
-                android:text="000"/>
+                android:id="@+id/presentation_mobile_all_time"/>
+            <Chronometer
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/presentation_mobile_slide_time"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:id="@+id/presentation_mobile_slide_time"
-                android:text="000"/>
         </LinearLayout>
 
         <LinearLayout

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.hardware.display.DisplayManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Display;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -87,6 +89,14 @@ public class PresentationActivity extends RoboActionBarActivity implements View.
     @InjectView(R.id.presentation_mobile_note)
     private TextView note;
 
+    // Chrono prensetation time
+    @InjectView(R.id.presentation_mobile_all_time)
+    private Chronometer chronoAllTime;
+
+    // Chrono slide time
+    @InjectView(R.id.presentation_mobile_slide_time)
+    private Chronometer chronoSlideTime;
+
 
     ///////  Other
 
@@ -129,6 +139,10 @@ public class PresentationActivity extends RoboActionBarActivity implements View.
     @Override
     protected void onResume() {
         super.onResume();
+
+        chronoSlideTime.setFormat("H:MM:SS");
+        chronoAllTime.setFormat("H:MM:SS");
+
 
         mActivePresentations.clear();
         mDisplayManager = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
@@ -213,14 +227,13 @@ public class PresentationActivity extends RoboActionBarActivity implements View.
         Arrays.sort(fileTab);
         File text = fileTab[currentIndex];
 
-        //création de l'objet de lecture
+        // Read note
         FileReader fr = null;
         String str = "";
         try {
             fr = new FileReader(text);
             str = "";
             int i = 0;
-            //Lecture des données
             while ((i = fr.read()) != -1) {
                 str += (char) i;
             }
@@ -291,6 +304,8 @@ public class PresentationActivity extends RoboActionBarActivity implements View.
                     PresentationContents contents = new PresentationContents(directory, 0);
                     showPresentation(selectedDisplay, contents);
                     updatePresentationNote();
+                    chronoAllTime.start();
+                    chronoSlideTime.start();
                     break;
             }
     }
@@ -300,7 +315,10 @@ public class PresentationActivity extends RoboActionBarActivity implements View.
             TvPresentation tv = mActivePresentations.valueAt(i);
             if(tv.showContent(futurIndex)){
                 currentIndex = futurIndex;
+                chronoSlideTime.setBase(SystemClock.elapsedRealtime());
             };
         }
+
+        updatePresentationNote();
     }
 }
