@@ -16,6 +16,7 @@ import java.util.Arrays;
 import prezcast.sgu.fr.showcast.R;
 import prezcast.sgu.fr.showcast.activity.MainActivity;
 import prezcast.sgu.fr.showcast.activity.PresentationActivity;
+import prezcast.sgu.fr.showcast.db.setting.Setting;
 import prezcast.sgu.fr.showcast.presentation.PresentationContents;
 
 /**
@@ -65,7 +66,7 @@ public class TvPresentation extends Presentation implements ViewSwitcher.ViewFac
      * @return
      */
     private boolean updateContent(int index) {
-        File f = new File(MainActivity.APP_SDCARD_DIRECTORY+"/"+contents.prez+"/img/");
+        File f = new File(Setting.DEFAULT_DIRECTORY_VALUE+"/"+contents.prez+"/img/");
         File[] fileTab = f.listFiles();
         Arrays.sort(fileTab);
 

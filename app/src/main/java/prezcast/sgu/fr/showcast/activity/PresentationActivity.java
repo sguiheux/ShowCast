@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import prezcast.sgu.fr.showcast.db.setting.Setting;
 import prezcast.sgu.fr.showcast.presentation.PresentationContents;
 import prezcast.sgu.fr.showcast.R;
 import prezcast.sgu.fr.showcast.presentation.TvPresentation;
@@ -222,7 +223,7 @@ public class PresentationActivity extends RoboActionBarActivity implements View.
         layoutOnPrez.setVisibility(View.VISIBLE);
         layoutOffPrez.setVisibility(View.GONE);
 
-        File f = new File(MainActivity.APP_SDCARD_DIRECTORY + "/" + directory + "/note/");
+        File f = new File(Setting.DEFAULT_DIRECTORY_VALUE + "/" + directory + "/note/");
         File[] fileTab = f.listFiles();
         Arrays.sort(fileTab);
         File text = fileTab[currentIndex];

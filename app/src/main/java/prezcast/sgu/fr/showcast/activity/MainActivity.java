@@ -2,6 +2,8 @@ package prezcast.sgu.fr.showcast.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import prezcast.sgu.fr.showcast.R;
+import prezcast.sgu.fr.showcast.db.setting.Setting;
 import prezcast.sgu.fr.showcast.roboguice.RoboActionBarActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -24,11 +27,6 @@ import roboguice.inject.InjectView;
  */
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActionBarActivity {
-
-    /**
-     * Application directory.
-     */
-    public static final String APP_SDCARD_DIRECTORY = "/sdcard/showcast";
 
     /**
      * List presentation directory.
@@ -54,7 +52,7 @@ public class MainActivity extends RoboActionBarActivity {
         super.onResume();
 
         listDirectory.clear();
-        for (File f : new File(APP_SDCARD_DIRECTORY).listFiles()) {
+        for (File f : new File(Setting.DEFAULT_DIRECTORY_VALUE).listFiles()) {
             if (f.isDirectory()) {
                 listDirectory.add(f.getName());
             }
@@ -77,7 +75,7 @@ public class MainActivity extends RoboActionBarActivity {
      * Create the application main directory for presentation
      */
     private void initFirstTime() {
-        File f = new File(APP_SDCARD_DIRECTORY);
+        File f = new File(Setting.DEFAULT_DIRECTORY_VALUE);
         if (!f.exists()) {
             f.mkdir();
         }
@@ -92,6 +90,13 @@ public class MainActivity extends RoboActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        switch(item.getItemId()){
+            case R.id.action_settings:
+                Intent launchSettings = new Intent(this,SettingsActivity.class);
+                startActivity(launchSettings);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
