@@ -107,7 +107,6 @@ public class SettingsAsync extends AsyncTask<Setting, Void, Map> {
 
     @Override
     protected void onPostExecute(Map map) {
-        Log.d("eee",map.toString());
         if(ctx.get() instanceof SettingsActivity){
             ((SettingsActivity) ctx.get()).updateSettings(map);
             ((SettingsActivity) ctx.get()).showResult(map != null);
