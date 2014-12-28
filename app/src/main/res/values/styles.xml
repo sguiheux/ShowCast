@@ -14,4 +14,16 @@
         <item name="android:layout_marginTop">20dp</item>
     </style>
 
+    <style name="chrono">
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:textSize">60sp</item>
+    </style>
+
+    <style name="chrono_title">
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:textSize">40dp</item>
+    </style>
+
 </resources>

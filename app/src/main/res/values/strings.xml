@@ -15,4 +15,6 @@
     <string name="setting.zone.general">General</string>
     <string name="dialog_setting_edit">Save</string>
     <string name="dialog_setting_cancel">Cancel</string>
+    <string name="total_time">Total time</string>
+    <string name="current_slide_time">Current Slide</string>
 </resources>

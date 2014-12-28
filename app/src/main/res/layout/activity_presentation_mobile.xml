@@ -8,23 +8,53 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/presentation_mobile_on">
-
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/presentation_mobile_title_layout"
+            android:orientation="horizontal"
+            android:weightSum="4"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="2"
+                android:text="@string/total_time"
+                style="@style/chrono_title"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="2"
+                android:text="@string/current_slide_time"
+                style="@style/chrono_title" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:id="@+id/presentation_mobile_time_layout"
-            android:orientation="horizontal">
+            android:layout_below="@id/presentation_mobile_title_layout"
+            android:orientation="horizontal"
+            android:weightSum="2">
             <Chronometer
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/presentation_mobile_all_time"/>
+                android:id="@+id/presentation_mobile_all_time"
+                android:gravity="center"
+                android:layout_weight="1"
+                style="@style/chrono"/>
             <Chronometer
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/presentation_mobile_slide_time"/>
+                android:id="@+id/presentation_mobile_slide_time"
+                android:gravity="center"
+                android:layout_weight="1"
+                style="@style/chrono"/>
 
         </LinearLayout>
 
@@ -66,7 +96,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
-        android:visibility="visible"
+        android:visibility="gone"
         android:id="@+id/presentation_mobile_off">
 
         <Button

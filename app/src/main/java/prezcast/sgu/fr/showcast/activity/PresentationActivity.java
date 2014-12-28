@@ -141,8 +141,8 @@ public class PresentationActivity extends RoboActionBarActivity implements View.
     protected void onResume() {
         super.onResume();
 
-        chronoSlideTime.setFormat("H:MM:SS");
-        chronoAllTime.setFormat("H:MM:SS");
+        //chronoSlideTime.setFormat("H:MM:SS");
+        //chronoAllTime.setFormat("H:MM:SS");
 
 
         mActivePresentations.clear();
